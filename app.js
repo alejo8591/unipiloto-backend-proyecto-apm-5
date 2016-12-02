@@ -64,20 +64,22 @@ db.serialize(function() {
 
 
     // Creando tabla de usuarios => "user"
-    db.run('CREATE TABLE IF NOT EXISTS user (id integer primary key autoincrement,' +
-                                            'email text,' +
-                                            'password text,' +
-                                            'firstname text,' +
-                                            'lastname text,' +
-                                            'phone text)');
+    db.run('CREATE TABLE IF NOT EXISTS user (id INTEGER PRIMARY KEY AUTOINCREMENT,' +
+                                            'email TEXT,' +
+                                            'password TEXT,' +
+                                            'firstname TEXT,' +
+                                            'lastname TEXT,' +
+                                            'phone TEXT)');
 
 
     // Creando tabla de productos "product"
-    db.run('CREATE TABLE IF NOT EXISTS product (id integer primary key autoincrement, ' +
-                                                'name text,' +
-                                                'type text,' +
-                                                'quantity real,' +
-                                                'price real)');
+    db.run('CREATE TABLE IF NOT EXISTS product (id INTEGER PRIMARY KEY AUTOINCREMENT, ' +
+                                                'name TEXT,' +
+                                                'type TEXT,' +
+                                                'quantity REAL,' +
+                                                'price REAL,' +
+                                                'latitude REAL,' +
+                                                'longitude REAL)');
 
 
     db.get('SELECT * FROM user WHERE email = "admin@admin.com"', function(err, rows) {
@@ -98,14 +100,16 @@ db.serialize(function() {
                  '1234566775');
 
 
-        var stmt = db.prepare('INSERT INTO product (name, type, quantity, price) VALUES (?, ?, ?, ?)');
+        var stmt = db.prepare('INSERT INTO product (name, type, quantity, price, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?)');
 
 
         // Ingresando datos de prueba para Product
         stmt.run('Motorola',
-                 'Telefono Móvil',
-                 100.0,
-                 567000.0);
+            'Telefono Móvil',
+            100.0,
+            567000.0,
+            4.609620,
+            -74.117202);
 
           stmt.finalize();
       }

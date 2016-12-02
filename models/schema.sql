@@ -4,7 +4,9 @@ CREATE TABLE product
     name TEXT,
     type TEXT,
     quantity REAL,
-    price REAL
+    price REAL,
+    latitude REAL,
+    longitude REAL
 );
 CREATE TABLE sqlite_sequence
 (

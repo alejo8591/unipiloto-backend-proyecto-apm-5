@@ -596,11 +596,13 @@ module.exports = function( app, db ) {
     var createProduct = function( req, res ){
 
         console.log('POST - save Product with data = \n {' +
-                    '\n name : ' + req.body.name +
-                    '\n type : ' + req.body.type +
-                    '\n price : ' + req.body.price +
-                    '\n type : ' + req.body.type +
-                    '\n quantity : ' + req.body.quantity +
+                    '\n name: ' + req.body.name +
+                    '\n type: ' + req.body.type +
+                    '\n price: ' + req.body.price +
+                    '\n type: ' + req.body.type +
+                    '\n quantity: ' + req.body.quantity +
+                    '\n latitude: ' + req.body.latitude +
+                    '\n longitude: ' + req.body.longitude +
             '\n }');
 
         /*
@@ -616,14 +618,16 @@ module.exports = function( app, db ) {
 
          */
 
-        var stmt = db.prepare('INSERT INTO product (name, type, quantity, price) VALUES (?, ?, ?, ?)');
+        var stmt = db.prepare('INSERT INTO product (name, type, quantity, price, latitude, longitude) VALUES (?, ?, ?, ?, ?, ?)');
 
         stmt.run(
             [
                 req.body.name,
                 req.body.type,
                 req.body.quantity,
-                req.body.price
+                req.body.price,
+                req.body.latitude,
+                req.body.longitude
             ],
 
             function( rows, err ) {
@@ -634,9 +638,9 @@ module.exports = function( app, db ) {
 
                 } else {
 
-                    db.get('SELECT * FROM product WHERE name = ?',
+                    db.get('SELECT * FROM product WHERE latitude = ? AND longitude = ?',
 
-                        [ req.body.name ],
+                        [req.body.latitude,  req.body.longitude],
 
                         function(err, rows) {
 
@@ -650,10 +654,12 @@ module.exports = function( app, db ) {
 
 
                                 console.log('POST - save Product with data = \n {' +
-                                                                                '\n name : ' + req.body.name +
-                                                                                '\n type : ' + req.body.type +
-                                                                                '\n price : ' + req.body.price +
-                                                                                '\n quantity : ' + req.body.quantity +
+                                                                                '\n name: ' + req.body.name +
+                                                                                '\n type: ' + req.body.type +
+                                                                                '\n price: ' + req.body.price +
+                                                                                '\n quantity: ' + req.body.quantity +
+                                                                                '\n latitude: ' + req.body.latitude +
+                                                                                '\n longitude: ' + req.body.longitude +
                                                                             '\n }');
 
                                 res.header( 'Content-Type', 'application/json' ).status(201).json( rows );
@@ -672,10 +678,12 @@ module.exports = function( app, db ) {
     var updateProduct = function(req, res) {
 
         console.log('PUT - update Product with data = \n {' +
-                                                         '\n name : ' + req.body.name +
-                                                         '\n type : ' + req.body.type +
-                                                         '\n quantity : ' + req.body.quantity +
-                                                         '\n price : ' + req.body.price + '\n ' +
+                                                         '\n name: ' + req.body.name +
+                                                         '\n type: ' + req.body.type +
+                                                         '\n quantity: ' + req.body.quantity +
+                                                         '\n price: ' + req.body.price + '\n ' +
+                                                         '\n latitude: ' + req.body.latitude +
+                                                         '\n longitude: ' + req.body.longitude +
                                                         '}');
 
         /*
@@ -690,7 +698,7 @@ module.exports = function( app, db ) {
         res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With, *');
 
 
-        var stmt = db.prepare("UPDATE product SET name = ?, type = ?, quantity = ?, price = ? WHERE id = ?");
+        var stmt = db.prepare("UPDATE product SET name = ?, type = ?, quantity = ?, price = ?, latitude = ?, longitude = ? WHERE id = ?");
 
         stmt.run(
             [
@@ -698,6 +706,8 @@ module.exports = function( app, db ) {
                 req.body.type,
                 req.body.quantity,
                 req.body.price,
+                req.body.latitude,
+                req.body.longitude,
                 req.params.id
             ],
 
@@ -722,10 +732,12 @@ module.exports = function( app, db ) {
                             if (rows) {
 
                                 console.log('POST - Update Product with data = \n {' +
-                                                                                  '\n name : ' + req.body.name +
-                                                                                  '\n type : ' + req.body.type +
-                                                                                  '\n quantity : ' + req.body.quantity +
-                                                                                  '\n price : ' + req.body.price +
+                                                                                    '\n name: ' + req.body.name +
+                                                                                    '\n type: ' + req.body.type +
+                                                                                    '\n quantity: ' + req.body.quantity +
+                                                                                    '\n price: ' + req.body.price + '\n ' +
+                                                                                    '\n latitude: ' + req.body.latitude +
+                                                                                    '\n longitude: ' + req.body.longitude +
                                                                               '\n }');
 
                                 res.header( 'Content-Type', 'application/json' ).json( rows );
